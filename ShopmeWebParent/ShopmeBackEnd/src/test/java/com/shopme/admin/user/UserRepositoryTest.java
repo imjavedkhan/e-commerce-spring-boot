@@ -27,7 +27,7 @@ public class UserRepositoryTest {
     public void testCreateUserWithOneRole(){
 
         User userJak = new User("javed@gmail.com","javed","Javed","Khan");
-        Optional<Role> adminRole = roleRepository.findById(2);
+        Optional<Role> adminRole = roleRepository.findById(1);
         userJak.addRole(adminRole.get());
         User saveUser = userRepository.save(userJak);
         assertEquals(userJak,saveUser);
@@ -37,8 +37,8 @@ public class UserRepositoryTest {
     public void testCreateUserWithTwoRole(){
 
         User userTom = new User("tom@gmil.com","tom","Tom","Hank");
-        Role roleEditor = new Role(6);
-        Role roleAssistant = new Role(5);
+        Role roleEditor = new Role(5);
+        Role roleAssistant = new Role(4);
         userTom.addRole(roleEditor);
         userTom.addRole(roleAssistant);
         User savedUser  = userRepository.save(userTom);
@@ -68,17 +68,15 @@ public class UserRepositoryTest {
 
     @Test
     public void testUpdateUserRole(){
-        User userTom = userRepository.findById(4).get();
+        Optional<User> userTom = userRepository.findById(4);
 
-        Role roleEditor = new Role(6);
+        Role roleEditor = new Role(5);
         Role roleSalesperson = new Role(3);
-
-        userTom.getRoles().remove(roleEditor);
-
-        userTom.addRole(roleSalesperson);
-
-        User savedUser = userRepository.save(userTom);
-
+        if(userTom.isPresent()) {
+            userTom.get().getRoles().remove(roleSalesperson);
+            userTom.get().addRole(roleEditor);
+            User savedUser = userRepository.save(userTom.get());
+        }
         //assertNotEquals(roleEditor,savedUser.getRoles())
     }
 

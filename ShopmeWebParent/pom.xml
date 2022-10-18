@@ -80,6 +80,11 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.shopme</groupId>
