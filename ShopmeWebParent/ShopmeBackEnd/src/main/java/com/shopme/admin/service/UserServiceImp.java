@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService{
@@ -40,6 +42,19 @@ public class UserServiceImp implements UserService{
 
     public void encodePassword(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+
+    public boolean isEmailUnique(String email){
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<User> getUserById(Integer id) throws UserNotFoundException {
+     try{
+         return userRepository.findById(id);
+     }catch (NoSuchElementException ex){
+         throw new UserNotFoundException("user not found"+ id);
+     }
     }
 
 }

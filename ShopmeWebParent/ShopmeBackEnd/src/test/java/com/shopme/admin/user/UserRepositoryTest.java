@@ -87,4 +87,11 @@ public class UserRepositoryTest {
             userRepository.deleteById(4);
         }
     }
+
+    @Test
+    public void testUserEmail(){
+        String email = "javed@gmail.com";
+        boolean exist = userRepository.existsByEmail(email);
+        assertTrue(exist);
+    }
 }
