@@ -97,7 +97,8 @@
 						<td>
 							<a class="las la-edit la-2x" th:href="@{'/user/edit/' + ${user.id}}" title="Edit the user"
 							   style="text-decoration: none; color:green;"></a>
-							<a class="las la-trash la-2x" href="" style="text-decoration: none;"></a>
+							<a class="las la-trash la-2x link-delete" th:href="@{'/user/delete/' + ${user.id}}"
+							   title= "Delete this user" style="text-decoration: none;"></a>
 						</td>
 					</tr>
 				</tbody>
@@ -108,5 +109,9 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script type="text/javascript">
+console.log('hello javed');
+</script>
+
 </body>
 </html>

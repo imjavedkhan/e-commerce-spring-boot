@@ -57,4 +57,14 @@ public class UserServiceImp implements UserService{
      }
     }
 
+    public void deleteUser(Integer id) throws UserNotFoundException {
+
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if(userOptional.isEmpty()) {
+            throw new UserNotFoundException("user not present" + id);
+        }
+        userRepository.deleteById(id);
+    }
+
 }
