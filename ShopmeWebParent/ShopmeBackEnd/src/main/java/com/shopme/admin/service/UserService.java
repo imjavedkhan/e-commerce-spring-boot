@@ -19,4 +19,6 @@ public interface UserService {
     Optional<User> getUserById(Integer id) throws UserNotFoundException;
 
     void deleteUser(Integer id) throws UserNotFoundException;
+
+    void enableUser(Integer id, boolean enabled);
 }

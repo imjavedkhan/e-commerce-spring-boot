@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -65,6 +66,18 @@ public class UserServiceImp implements UserService{
             throw new UserNotFoundException("user not present" + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void enableUser(Integer id, boolean enabled) {
+        /*Optional<User> user = userRepository.findById(id);
+
+        user.ifPresent(value -> value.setEnabled(!value.isEnabled()));
+
+        userRepository.save(user.get());*/
+
+        userRepository.updateEnableStatus(id,enabled);
     }
 
 }
