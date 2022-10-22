@@ -7,11 +7,13 @@ import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -40,18 +42,30 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public String saveUser(User user, RedirectAttributes redirectAttributes){
+    public String saveUser(@Valid User user,
+                           RedirectAttributes redirectAttributes,
+                           BindingResult result,
+                           Model model){
         System.out.println(user);
-        if(!userService.isEmailUnique(user.getEmail()))
+        if(userService.isEmailUnique(user.getEmail()))
         {
-            userService.saveUser(user);
-            redirectAttributes.addFlashAttribute("message","The user has been saved successfully");
-            return "redirect:/users";
-        } else {
-            System.out.println("Duplicate user");
+           result.rejectValue("email", null,"duplicate email");
+        }
+
+        if(result.hasErrors()) {
+            //redirectAttributes.addFlashAttribute("message","Duplicate email");
+            List<Role> roleList = userService.listRoles();
+            model.addAttribute("user",user);
+            model.addAttribute("listRole",roleList);
+            model.addAttribute("pageTitle","Edit user (ID: "+ user.getId() +")");
             return "user_form";
+
         }
         //TODO: handle duplicate user in database.
+
+        userService.saveUser(user);
+        redirectAttributes.addFlashAttribute("message","The user has been saved successfully");
+        return "redirect:/users";
     }
 
     @GetMapping("/user/edit/{id}")
@@ -80,6 +94,8 @@ public class UserController {
             redirectAttributes.addFlashAttribute("message",e.getMessage());
         }
         return "redirect:/users";
+
+        //TODO: handle delete pop up window
     }
 
     @GetMapping("/user/enable/{id}/enabled/{status}")
