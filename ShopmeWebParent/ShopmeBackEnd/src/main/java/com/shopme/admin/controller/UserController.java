@@ -7,14 +7,18 @@ import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -45,12 +49,13 @@ public class UserController {
     public String saveUser(@Valid User user,
                            RedirectAttributes redirectAttributes,
                            BindingResult result,
-                           Model model){
+                           Model model,
+                           @RequestParam("image") MultipartFile multipartFile){
         System.out.println(user);
-        if(userService.isEmailUnique(user.getEmail()))
-        {
-           result.rejectValue("email", null,"duplicate email");
-        }
+//        if(userService.isEmailUnique(user.getEmail()))
+//        {
+//           result.rejectValue("email", null,"duplicate email");
+//        }
 
         if(result.hasErrors()) {
             //redirectAttributes.addFlashAttribute("message","Duplicate email");
@@ -63,7 +68,7 @@ public class UserController {
         }
         //TODO: handle duplicate user in database.
 
-        userService.saveUser(user);
+        userService.saveUser(user,multipartFile);
         redirectAttributes.addFlashAttribute("message","The user has been saved successfully");
         return "redirect:/users";
     }

@@ -24,7 +24,7 @@ public class User {
     @Column(name = "last_name", length = 45, nullable = false)
     private String lastName;
 
-    @Column(length = 64)
+    @Column(nullable = true, length = 64)
     private String photo;
 
     private boolean enabled;
@@ -43,6 +43,13 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    @Transient
+    public String getPhotoImagePath() {
+        if (photo == null || id == null) return "/images/Avatar.png";
+
+        return "/user-photos/" + this.id + "/" + this.photo;
     }
 
     public Integer getId() {

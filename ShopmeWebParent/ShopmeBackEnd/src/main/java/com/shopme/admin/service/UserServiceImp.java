@@ -1,5 +1,6 @@
 package com.shopme.admin.service;
 
+import com.shopme.admin.config.FileUploadUtil;
 import com.shopme.admin.user.RoleRepository;
 import com.shopme.admin.user.UserRepository;
 import com.shopme.common.entity.Role;
@@ -7,10 +8,14 @@ import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,9 +41,23 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user, MultipartFile multipartFile) {
         encodePassword(user);
-        userRepository.save(user);
+
+        if(!multipartFile.isEmpty()){
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+            user.setPhoto(fileName);
+
+            User savedUser = userRepository.save(user);
+            String uploadDir = "user-photos/" + savedUser.getId();
+
+            try {
+                FileUploadUtil.cleanDir(uploadDir);
+                FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void encodePassword(User user){

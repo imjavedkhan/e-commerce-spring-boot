@@ -2,6 +2,7 @@ package com.shopme.admin.service;
 
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ public interface UserService {
 
     List<Role> listRoles();
 
-    void saveUser(User user);
+    void saveUser(User user, MultipartFile multipartFile);
 
     boolean isEmailUnique(String email);
 
