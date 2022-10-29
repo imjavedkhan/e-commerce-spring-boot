@@ -2,6 +2,7 @@ package com.shopme.admin.service;
 
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface UserService {
     void deleteUser(Integer id) throws UserNotFoundException;
 
     void enableUser(Integer id, boolean enabled);
+
+    Page<User> listByPage(int pageNum);
 }

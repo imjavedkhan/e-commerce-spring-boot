@@ -5,6 +5,7 @@ import com.shopme.admin.service.UserService;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
+import static com.shopme.admin.service.UserServiceImp.USER_PAGE_SIZE;
+
 @Controller
 public class UserController {
 
@@ -29,7 +32,28 @@ public class UserController {
     @GetMapping("/users")
     public String getAllUsers(Model model){
 
-        List<User> userList = userService.listAll();
+//        List<User> userList = userService.listAll();
+//        model.addAttribute("listUsers",userList);
+        return listUserByPage(1,model);
+    }
+
+    @GetMapping("/users/page/{pageNum}")
+    public String listUserByPage(@PathVariable(name = "pageNum") int pageNum, Model model){
+        Page<User> userList = userService.listByPage(pageNum);
+
+        List<User> listUser = userList.getContent();
+
+        int startCount = (pageNum-1) * USER_PAGE_SIZE + 1;
+        long endCount = (long) startCount + USER_PAGE_SIZE - 1;
+        if(endCount > userList.getTotalElements()){
+            endCount = userList.getTotalElements();
+        }
+
+        model.addAttribute("currentPage",pageNum);
+        model.addAttribute("totalPages",userList.getTotalPages());
+        model.addAttribute("startCount",startCount);
+        model.addAttribute("endCount",endCount);
+        model.addAttribute("totalItems",userList.getTotalElements());
         model.addAttribute("listUsers",userList);
         return "users";
     }
@@ -109,7 +133,7 @@ public class UserController {
                              RedirectAttributes redirectAttributes){
         userService.enableUser(id, enabled);
         String status = enabled ? "enabled" : "disabled";
-        String message = "The user ID " + id + " has been " + status;
+        String message = "The User ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message",message);
         return "redirect:/users";
 

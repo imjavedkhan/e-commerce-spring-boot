@@ -6,6 +6,9 @@ import com.shopme.admin.user.UserRepository;
 import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,6 +24,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImp implements UserService{
 
+    public static final int USER_PAGE_SIZE = 4;
     @Autowired
     private UserRepository userRepository;
 
@@ -97,6 +101,16 @@ public class UserServiceImp implements UserService{
         userRepository.save(user.get());*/
 
         userRepository.updateEnableStatus(id,enabled);
+    }
+
+    public Page<User> listByPage(int pageNum){
+        Pageable pageable = PageRequest.of(pageNum-1,USER_PAGE_SIZE);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        System.out.println("PageNum: "+ pageNum);
+        System.out.println("Total Elements: "+ userPage.getTotalElements());
+        System.out.println("Total page: "+ userPage.getTotalPages());
+        return userPage;
     }
 
 }
