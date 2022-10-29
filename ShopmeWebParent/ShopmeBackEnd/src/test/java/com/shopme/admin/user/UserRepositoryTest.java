@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(value = false)
+@Rollback(value = true)
 public class UserRepositoryTest {
 
     @Autowired
@@ -30,7 +30,7 @@ public class UserRepositoryTest {
     @Test
     public void testCreateUserWithOneRole(){
 
-        User userJak = new User("javed@gmail.com","javed","Javed","Khan");
+        User userJak = new User("javed@gmail.com","$2a$12$7ETRP9StrSMu3/ZiErMWAOUy1jq7VEhuEtoEdlAIBehbtUZtKoRNu","Javed","Khan");
         Optional<Role> adminRole = roleRepository.findById(1);
         userJak.addRole(adminRole.get());
         User saveUser = userRepository.save(userJak);
@@ -58,7 +58,7 @@ public class UserRepositoryTest {
     @Test
     public void testGetUserById(){
         User userJak = userRepository.findById(1).get();
-        assertEquals("Javed", userJak.getFirstName());
+        assertEquals("Nam", userJak.getFirstName());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testUserEmail(){
-        String email = "javed@gmail.com";
+        String email = "nam@codejava.net";
         boolean exist = userRepository.existsByEmail(email);
         assertTrue(exist);
     }
