@@ -6,6 +6,7 @@ import com.shopme.common.entity.Role;
 import com.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -34,12 +35,13 @@ public class UserController {
 
 //        List<User> userList = userService.listAll();
 //        model.addAttribute("listUsers",userList);
-        return listUserByPage(1,model);
+        return listUserByPage(1,model,"firstName","asc");
     }
 
     @GetMapping("/users/page/{pageNum}")
-    public String listUserByPage(@PathVariable(name = "pageNum") int pageNum, Model model){
-        Page<User> userList = userService.listByPage(pageNum);
+    public String listUserByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
+                                 @Param("sortField") String sortField, @Param("sortDir") String sortDir){
+        Page<User> userList = userService.listByPage(pageNum,sortField,sortDir);
 
         List<User> listUser = userList.getContent();
 
@@ -49,12 +51,17 @@ public class UserController {
             endCount = userList.getTotalElements();
         }
 
+        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
         model.addAttribute("currentPage",pageNum);
         model.addAttribute("totalPages",userList.getTotalPages());
         model.addAttribute("startCount",startCount);
         model.addAttribute("endCount",endCount);
         model.addAttribute("totalItems",userList.getTotalElements());
-        model.addAttribute("listUsers",userList);
+        model.addAttribute("listUsers",listUser);
+        model.addAttribute("sortField",sortField);
+        model.addAttribute("sortDir",sortDir);
+        model.addAttribute("reverseSortDir",reverseSortDir);
         return "users";
     }
 

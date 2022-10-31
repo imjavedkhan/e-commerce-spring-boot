@@ -24,5 +24,5 @@ public interface UserService {
 
     void enableUser(Integer id, boolean enabled);
 
-    Page<User> listByPage(int pageNum);
+    Page<User> listByPage(int pageNum, String sortField, String sortDir);
 }
