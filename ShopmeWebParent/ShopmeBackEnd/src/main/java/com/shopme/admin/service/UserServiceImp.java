@@ -104,12 +104,16 @@ public class UserServiceImp implements UserService{
         userRepository.updateEnableStatus(id,enabled);
     }
 
-    public Page<User> listByPage(int pageNum, String sortField, String sortDir){
+    public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword){
 
         Sort sort = sortDir.equals("asc") ?
                 Sort.by(sortField).ascending() : Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNum-1,USER_PAGE_SIZE,sort);
+
+        if(keyword != null){
+            return userRepository.findAllUser(keyword,pageable);
+        }
         Page<User> userPage = userRepository.findAll(pageable);
 
         System.out.println("PageNum: "+ pageNum);
