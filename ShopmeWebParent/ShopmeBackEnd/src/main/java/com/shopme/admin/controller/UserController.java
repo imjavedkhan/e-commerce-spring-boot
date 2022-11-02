@@ -1,6 +1,7 @@
 package com.shopme.admin.controller;
 
 import com.shopme.admin.service.UserCsvExporter;
+import com.shopme.admin.service.UserExcelExporter;
 import com.shopme.admin.service.UserNotFoundException;
 import com.shopme.admin.service.UserService;
 import com.shopme.common.entity.Role;
@@ -153,6 +154,13 @@ public class UserController {
     public void exportToCSV(HttpServletResponse response) throws IOException {
         List<User> userList = userService.listAll();
         UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(userList,response);
+    }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<User> userList = userService.listAll();
+        UserExcelExporter exporter = new UserExcelExporter();
         exporter.export(userList,response);
     }
 
