@@ -61,11 +61,17 @@
 		</div>
 		<div>
 			<h2>Manage Users</h2>
-			<a th:href="@{/users/new}">Create New User</a>
-			&nbsp;|&nbsp;
-			<a th:href="@{/users/export/csv}">Export to CSV</a>
-			&nbsp;|&nbsp;
-			<a th:href="@{/users/export/excel}">Export to Excel</a>
+			<a th:href="@{/users/new}" class="las la-user-plus la-2x"
+			   style="text-decoration: none; color:green;" title= "Add New user"></a>
+			&nbsp;&nbsp;
+			<a th:href="@{/users/export/csv}" class="las la-file-csv la-2x"
+			   style="text-decoration: none;" title= "Export CSV"></a>
+			&nbsp;&nbsp;
+			<a th:href="@{/users/export/excel}" class="las la-file-excel la-2x"
+			   style="text-decoration: none;" title= "Export Excel"></a>
+			&nbsp;&nbsp;
+			<a th:href="@{/users/export/pdf}" class="las la-file-pdf la-2x"
+			   style="text-decoration: none;" title= "Export Pdf"></a>
 		</div>
 
 		<div class ="alert alert-success text-center" th:if="${message != null}" th:text="${message}"></div>
@@ -74,16 +80,18 @@
 			<form th:action="@{/users/page/1}" class="form-inline m-3">
 				<input type="hidden" name="sortField" th:value="${sortField}">
 				<input type="hidden" name="sortDir" th:value="${sortDir}">
-				Filter: &nbsp;
-				<input type="search" name="keyword" th:value="${keyWord}" class="form-control" required/>
+				<input type="search" name="keyword" th:value="${keyWord}" class="form-control" placeholder="Search User" required/>
 				&nbsp;&nbsp;
-				<input type="submit" value="search" class="btn btn-primary"/>
-				&nbsp;&nbsp;
-				<input type="button" value="clear" class="btn btn-secondary" onclick="clearFilter()"/>
+				<button type="submit" class="btn btn-primary">
+					<i class="las la-search la-2x"></i>
+				</button>
+				<button type="button" class="btn btn-secondary" onclick="clearFilter()">
+					<i class="las la-backspace la-2x"></i>
+				</button>
 			</form>
 		</div>
 
-		<div>
+		<div class="full-details">
 			<table class="table table-bordered table-striped table-hover table-responsive-xl">
 				<thead class="thead-dark">
 				<tr>
